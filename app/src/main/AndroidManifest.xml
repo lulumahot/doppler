@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.lulu.doppler" >
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".affichageRes"
             android:label="@string/title_activity_affichage_res"
@@ -24,6 +27,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.lulu.doppler.MainActivity" />
         </activity>
+
     </application>
 
 </manifest>
