@@ -28,7 +28,7 @@ public class MainActivity extends ActionBarActivity {
                 Intent intent = new Intent(MainActivity.this, affichageRes.class);
                 startActivity(intent);
             }
-        });
+        } );
     }
 
     @Override
