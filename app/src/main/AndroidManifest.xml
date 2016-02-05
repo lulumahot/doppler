@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,12 +20,12 @@
         </activity>
 
         <activity
-            android:name=".affichageRes"
-            android:label="@string/title_activity_affichage_res"
-            android:parentActivityName=".MainActivity" >
+            android:name=".activities.ResultDisplayActivity"
+            android:label="@string/title_activity_display_result"
+            android:parentActivityName=".activities.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.lulu.doppler.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
 
     </application>

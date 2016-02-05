@@ -1,4 +1,4 @@
-package com.example.lulu.doppler;
+package com.example.lulu.doppler.activities;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -6,12 +6,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 
-import com.github.mikephil.charting.data.BarEntry;
-
-import java.util.ArrayList;
+import com.example.lulu.doppler.R;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -25,7 +22,7 @@ public class MainActivity extends ActionBarActivity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, affichageRes.class);
+                Intent intent = new Intent(MainActivity.this, ResultDisplayActivity.class);
                 startActivity(intent);
             }
         } );
