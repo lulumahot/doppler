@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Doppler.iml" filepath="$PROJECT_DIR$/Doppler.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/doppler.iml" filepath="$PROJECT_DIR$/doppler.iml" />
     </modules>
   </component>
 </project>
-
