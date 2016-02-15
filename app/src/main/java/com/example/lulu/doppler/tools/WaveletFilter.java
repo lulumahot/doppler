@@ -3,7 +3,7 @@ package com.example.lulu.doppler.tools;
 public class WaveletFilter {
 
     // Daubechies 10 filters :
-// TODO : essayer de mettre des valeurs plus précises pour les filtres (0.0000 -> -1.3264e-05 en réalité)
+// TODO : essayer de mettre des valeurs plus prï¿½cises pour les filtres (0.0000 -> -1.3264e-05 en rï¿½alitï¿½)
     // high-pass filter decomposition
     static double HI_D[] = {-0.0267, 0.1882, -0.5272, 0.6885, -0.2812, -0.2498, 0.1959, 0.1274,
             -0.0931, -0.0714, 0.0295, 0.0332, -0.0036, -0.0107, -0.0014, 0.0020, 0.0007, -0.0001,
@@ -26,16 +26,14 @@ public class WaveletFilter {
 
     static int [] tab_size = new int[level];
 
-    public static void filter(double[] buffer) {
-        // TODO : Implement filter treatment
-        System.out.println("size LO_D : %d \n" + LO_D.length);
-        //double LO_D_reverse[] = reverseTab(LO_D);
-        //double HI_D_reverse[] = reverseTab(HI_D);
+    public static void filter(short[] buff) {
 
-        // nbEch dans le buffer => = buffer.length
-        int nbEch = buffer.length;
+        double buffer[] = new double[buff.length];
+        for (int k = 0; k < buff.length; k++) {
+            buffer[k] = buff[k];
+        }
+
         int current_size = buffer.length;
-        //double nb_fragments =  nbEch / LO_D.length;
 
         double new_buffer[] = new double[buffer.length];
 
@@ -44,118 +42,72 @@ public class WaveletFilter {
         double buffer_high3 [];
         double buffer_high4 [];
 
-        double buffer_low_final [];
+        double buffer_low_final [] = new double[1];
+        int taille_buffer_low_final = 0;
+
+        // On peut se servir du premier Ã©lÃ©ment pour dÃ©crire la longueur des sous tableaux
+        double tab_conv_High_lvl[][] = new double[4][buffer.length * 2];
 
         //decomposition
-        /*for (int j = 0; j < level; j++){
+        for (int j = 0; j < level; j++){
             double buffer_process [] = new double [current_size];
 
             tab_size[j] = current_size;
 
             double[] buffer_dec = decomposition(buffer, HI_D, LO_D);
-            //passer les hautes et basses fréquences séparemment
+            //passer les hautes et basses frï¿½quences sï¿½paremment
             double[] buffer_low = new double[buffer_dec.length / 2];
             double[] buffer_high = new double[buffer_dec.length / 2];
             //on remplie les tableaux pour la reconstruction
-            //tableau des hautes fréquences à garder à part après chaque décomposition
+            //tableau des hautes frï¿½quences ï¿½ garder ï¿½ part aprï¿½s chaque dï¿½composition
             for (int i = 0; i < buffer_dec.length / 2; i++) {
                 buffer_low[i] = buffer_dec[i];
                 buffer_high[i] = buffer_dec[i + buffer_dec.length / 2];
             }
             //stockage pour reconstruction
-            switch (level){
-                case 0 :
-                    buffer_high1 = new double[buffer_high.length];
-                    for (int k = 0; k < buffer_high.length; k++){
-                        buffer_high1[k] = buffer_high[k];
-                    }
-                    break;
-                case 1 :
-                    buffer_high2 = new double[buffer_high.length];
-                    for (int k = 0; k < buffer_high.length; k++){
-                        buffer_high2[k] = buffer_high[k];
-                    }
-                    break;
-                case 2 :
-                    buffer_high3 = new double[buffer_high.length];
-                    for (int k = 0; k < buffer_high.length; k++){
-                        buffer_high3[k] = buffer_high[k];
-                    }
-                    break;
-                case 3 :
-                    buffer_high4 = new double[buffer_high.length];
-                    for (int k = 0; k < buffer_high.length; k++){
-                        buffer_high4[k] = buffer_high[k];
-                    }
-                    //stockage reconstruction buffer low final + sur échantillonnage
-                    buffer_low_final = new double [current_size*2];
-                    for (int k = 0; k < current_size*2; k++){
-                        buffer_low_final[k] = 0.0;
-                    }
-                    for (int k = 0; k < current_size; k++) {
-                        buffer_low_final[k*2] = buffer_low[k];
-                    }
-                    break;
-                default:
-                    break;
+
+            tab_conv_High_lvl[j][0] = (double) buffer_high.length;
+            for (int k = 0; k < buffer_high.length; k++) {
+                tab_conv_High_lvl[j][k+1] = buffer_high[k];
             }
-            //màj size pour calcul reconstruction plus tard
+            if (j == 3) {
+                //stockage reconstruction buffer low final + sur ï¿½chantillonnage
+                buffer_low_final = new double [current_size*2];
+                taille_buffer_low_final = buffer_low_final.length;
+                for (int k = 0; k < current_size*2; k++){
+                    buffer_low_final[k] = 0.0;
+                }
+                for (int k = 0; k < current_size; k++) {
+                    buffer_low_final[k*2] = buffer_low[k];
+                }
+            }
+            //mï¿½j size pour calcul reconstruction plus tard
             current_size = buffer_low.length;
 
             //double[] buffer_rec = reconstruction(buffer_low, buffer_high, HI_R, LO_R, tab_size[j]);
         }
         //reconstruction
-       /* double [] buffer_reconstruit;
+        double [] buffer_reconstruit = new double[1];
         for (int j = level-1; j >= 0; j--){
             double [] buffer_high;
             double [] buffer_low;
-            //recuperation bon buffer + le sur échantillonnage se fait dans la fonction reconstruction
-            switch (level) {
-                case 0:
-                    buffer_high = new double[buffer_high1.length];
-                    buffer_low = new double[buffer_reconstruit.length]; //de la meme taille que buffer_high donc
-                    for (int k = 0; k < buffer_high1.length; k++) {
-                        buffer_high[k] = buffer_high1[k];*/
-               /*         buffer_low[k] = buffer_reconstruit[k];
-                    }
-                    break;
-                case 1:
-                    buffer_high = new double[buffer_high2.length];
-                    buffer_low = new double[buffer_reconstruit.length];
-                    for (int k = 0; k < buffer_high2.length; k++) {
-                        buffer_high[k] = buffer_high2[k];
-                        buffer_low[k] = buffer_reconstruit[k];
-                    }
-                    break;
-                case 2:
-                    buffer_high = new double[buffer_high3.length];
-                    buffer_low = new double[buffer_reconstruit.length];
-                    for (int k = 0; k < buffer_high.length; k++) {
-                        buffer_high[k] = buffer_high3[k];
-                        buffer_low[k] = buffer_reconstruit[k];
-                    }
-                    break;
-                case 3:
-                    buffer_high = new double[buffer_high4.length];
-                    buffer_low = new double [buffer_low_final.length];
-                    for (int k = 0; k < buffer_high4.length; k++) {
-                        buffer_high[k] = buffer_high4[k];
-                        buffer_low[k] = buffer_low_final[k];
-                    }
-                default:
-                    break;
+            //recuperation bon buffer + le sur ï¿½chantillonnage se fait dans la fonction reconstruction
+            buffer_high = new double[(int)tab_conv_High_lvl[j][0]];
+            if (j == 3) {
+                buffer_low = new double[taille_buffer_low_final]; //de la meme taille que buffer_high donc
+                for (int k = 0; k < tab_conv_High_lvl[j][0]; k++) {
+                    buffer_high[k] = tab_conv_High_lvl[j][k+1];
+                    buffer_low[k] = buffer_low_final[k];
+                }
+            } else {
+                buffer_low = new double[buffer_reconstruit.length]; //de la meme taille que buffer_high donc
+                for (int k = 0; k < tab_conv_High_lvl[j][0]; k++) {
+                    buffer_high[k] = tab_conv_High_lvl[j][k+1];
+                    buffer_low[k] = buffer_low_final[k];
+                }
             }
             buffer_reconstruit = reconstruction(buffer_low,buffer_high,HI_R, LO_R, tab_size[j]);
-        }*/
-
-        // test convolve
-        /*double x[] = {5, 4, 3, 2, 1, 1, 2, 3, 4, 5};
-        double h[] = {-0.1294, 0.2241, 0.8365, 0.4830};
-        double y[] = convolve(x, h);
-        for (int i=0; i< y.length; i++) {
-            System.out.print(y[i] + " ");
-        }*/
-
+        }
     }
 
     static double[] decomposition(double[] buffer, double HI_D [], double LO_D[]) {
@@ -187,7 +139,7 @@ public class WaveletFilter {
 
         double tmp_lo [] = convolve(buffer_low_up,LO_R);
         double tmp_hi [] = convolve(buffer_high_up,HI_R);
-        //le nombre de valeur à supprimer avant et après la convolution + somme
+        //le nombre de valeur ï¿½ supprimer avant et aprï¿½s la convolution + somme
         int nb_val = ((tmp_lo.length-1)-current_size)/2;
         double result [] = new double [tmp_hi.length - (nb_val*2)];
 
