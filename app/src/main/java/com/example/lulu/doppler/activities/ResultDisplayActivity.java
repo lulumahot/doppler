@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.example.lulu.doppler.R;
+import com.example.lulu.doppler.io.SaveSound;
 import com.example.lulu.doppler.io.SoundRecorder;
 import com.example.lulu.doppler.listeners.OnSoundReadListener;
 import com.example.lulu.doppler.tools.WaveletFilter;
@@ -22,11 +23,13 @@ import com.github.mikephil.charting.data.LineDataSet;
 
 import org.jtransforms.fft.DoubleFFT_1D;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ResultDisplayActivity extends ActionBarActivity {
     private LineChart chart;
     ArrayList xVals = new ArrayList();
+    ArrayList<Short> completeSound = new ArrayList<Short>();
     Boolean record=false;
     AudioManager am;
 
@@ -36,6 +39,7 @@ public class ResultDisplayActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final int sampleRateInHz = 44100;
         setContentView(R.layout.activity_result_display);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Context context = getApplicationContext();
@@ -56,8 +60,19 @@ public class ResultDisplayActivity extends ActionBarActivity {
                 }else{
                     b.setImageResource(R.drawable.record);
                     record=false;
+                    short[] total = new short[completeSound.size()];
+                    //System.out.println("fgd" + total[96]);
+                    for (int i = 0 ; i < total.length ; i++)
+                        total[i]=completeSound.get(i);
+                    SaveSound ss = new SaveSound(total, sampleRateInHz);
+                    try {
+                        ss.rawToWave();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    completeSound.clear();
                 }
-                
+
             }
         });
         chart = (LineChart) findViewById(R.id.chart);
@@ -79,11 +94,10 @@ public class ResultDisplayActivity extends ActionBarActivity {
         LineData data = new LineData();
         chart.setData(data);
 
-        final int sampleRateInHz = 44100;
-        SoundRecorder recorder = new SoundRecorder(sampleRateInHz, AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT);
+        SoundRecorder recorder = new SoundRecorder(sampleRateInHz, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
         final int bufferSize = recorder.getBufferSize();
 
-        at = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRateInHz, AudioFormat.CHANNEL_OUT_STEREO,
+        at = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRateInHz, AudioFormat.CHANNEL_OUT_MONO,
                 recorder.getAudioFormat(), bufferSize, AudioTrack.MODE_STREAM);
 
         at.play();
@@ -93,9 +107,15 @@ public class ResultDisplayActivity extends ActionBarActivity {
             public void OnReceive(short[] buffer, int nbRealValues) {
                 at.write(buffer, 0, nbRealValues);
 
-                WaveletFilter.filter(buffer);
-
-                System.out.println("iki : ca feed : " + nbRealValues);
+                //WaveletFilter.filter(buffer);
+                //System.out.println("nbvalue" + nbRealValues);
+                if(record) {
+                    for (int i = 0; i < nbRealValues; i++) {
+                        completeSound.add(buffer[i]);
+                        //System.out.println("wtf" + completeSound.get(i));
+                    }
+                }
+                //System.out.println("iki : ca feed : " + nbRealValues);
                 DoubleFFT_1D fftDo = new DoubleFFT_1D(buffer.length);
                 double[] fft = new double[buffer.length * 2];
 
@@ -114,7 +134,7 @@ public class ResultDisplayActivity extends ActionBarActivity {
                     }
                 }
                 double res = argmax * sampleRateInHz / bufferSize;
-                System.out.println("ikik : " + argmax);
+                //System.out.println("ikik : " + argmax);
 
                 if (res < 15000) {
                     ajouterValeur(2 * res);

@@ -54,6 +54,7 @@ public class SaveSound {
 
     public void rawToWave() throws IOException {
         DataOutputStream output = null;
+        System.out.println("okok" + rawData.length);
         try {
             output = new DataOutputStream(new FileOutputStream(waveFile));
             // WAVE header
@@ -77,6 +78,7 @@ public class SaveSound {
             ByteBuffer.wrap(rawData).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(shorts);*/
             ByteBuffer bytes = ByteBuffer.allocate(rawData.length * 2);
             for (short s : rawData) {
+                //System.out.println("tropico" + " " + s + " " + swap(s));
                 bytes.putShort(swap(s));
             }
             output.write(bytes.array());
