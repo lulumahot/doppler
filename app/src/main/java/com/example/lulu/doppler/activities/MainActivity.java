@@ -6,26 +6,56 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.lulu.doppler.R;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
+
+import java.lang.annotation.Target;
 
 
 public class MainActivity extends ActionBarActivity {
-
+    private com.github.amlcurran.showcaseview.targets.Target t1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ImageButton b = (ImageButton) findViewById(R.id.imageButton);
+        ImageButton ib = (ImageButton) findViewById(R.id.imageButton);
+        Button b = (Button) findViewById(R.id.button);
+        t1 = new ViewTarget(R.id.imageButton, this);
+        final ShowcaseView scv = new ShowcaseView.Builder(this)
+                .setTarget(com.github.amlcurran.showcaseview.targets.Target.NONE)
+                .setContentTitle("Aide :")
+                .setContentText("Cliquez sur le coeur pour démarrer")
+                .hideOnTouchOutside()
+                .build();
+        scv.setButtonText("OK");
+        scv.hide();
         b.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                scv.setShowcase(t1, true);
+                scv.show();
+            }
+        });
+
+
+
+        ib.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ResultDisplayActivity.class);
                 startActivity(intent);
+                scv.hide();
             }
         } );
+
     }
 
     @Override

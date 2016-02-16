@@ -8,6 +8,7 @@ import android.media.AudioTrack;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.lulu.doppler.R;
@@ -15,6 +16,8 @@ import com.example.lulu.doppler.io.SaveSound;
 import com.example.lulu.doppler.io.SoundRecorder;
 import com.example.lulu.doppler.listeners.OnSoundReadListener;
 import com.example.lulu.doppler.tools.WaveletFilter;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -34,12 +37,11 @@ public class ResultDisplayActivity extends ActionBarActivity {
     AudioManager am;
 
     AudioTrack at;
-
+    private com.github.amlcurran.showcaseview.targets.Target t2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final int sampleRateInHz = 44100;
         setContentView(R.layout.activity_result_display);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Context context = getApplicationContext();
@@ -47,13 +49,35 @@ public class ResultDisplayActivity extends ActionBarActivity {
         //am.setMode(AudioManager.MODE_IN_CALL);
         //am.setSpeakerphoneOn(true);
         //am.setMicrophoneMute(true);
+        final int sampleRateInHz = 44100;
+        Button b2;
+        b2 = (Button) findViewById(R.id.button2);
+        t2 = new ViewTarget(R.id.register, this);
+        final ShowcaseView scv1 = new ShowcaseView.Builder(this)
+                .setTarget(com.github.amlcurran.showcaseview.targets.Target.NONE)
+                .setContentTitle("Aide :")
+                .setContentText("Cliquez sur le boutton pour enregistrer le bébé\n Le diagramme affiche le spectrogramme du signal")
+                .hideOnTouchOutside()
+                .build();
+        scv1.setButtonText("OK");
+        scv1.hide();
 
-        ImageButton b = (ImageButton) findViewById(R.id.register);
-        b.setOnClickListener(new View.OnClickListener() {
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scv1.setShowcase(t2, true);
+                scv1.show();
+            }
+        });
+
+
+        ImageButton ib = (ImageButton) findViewById(R.id.register);
+        ib.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 ImageButton b = (ImageButton) findViewById(R.id.register);
+                scv1.hide();
                 if(record==false) {
                     b.setImageResource(R.drawable.stop);
                     record=true;
@@ -77,7 +101,7 @@ public class ResultDisplayActivity extends ActionBarActivity {
         });
         chart = (LineChart) findViewById(R.id.chart);
         // no description text
-        chart.setNoDataTextDescription("You need to provide data for the chart.");
+        chart.setNoDataTextDescription("Branchez la sonde Doppler");
         // enable touch gestures
         chart.setTouchEnabled(true);
 
@@ -107,7 +131,7 @@ public class ResultDisplayActivity extends ActionBarActivity {
             public void OnReceive(short[] buffer, int nbRealValues) {
                 at.write(buffer, 0, nbRealValues);
 
-                //WaveletFilter.filter(buffer);
+
                 //System.out.println("nbvalue" + nbRealValues);
                 if(record) {
                     for (int i = 0; i < nbRealValues; i++) {

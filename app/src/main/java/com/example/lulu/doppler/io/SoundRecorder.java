@@ -5,6 +5,7 @@ import android.media.MediaRecorder;
 import android.os.AsyncTask;
 
 import com.example.lulu.doppler.listeners.OnSoundReadListener;
+import com.example.lulu.doppler.tools.WaveletFilter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,7 +40,7 @@ public class SoundRecorder extends AsyncTask<Void, short[], Void> {
 
             // Retourne le nombre de valeurs réelles, parce qu'il peut y en avoir moins que la taille du tableau
             nbRealValues = recorder.read(buffer, 0, bufferSize);
-
+            buffer= WaveletFilter.filter(buffer);
             for(OnSoundReadListener listener : listeners) {
                 listener.OnReceive(buffer, nbRealValues);
             }
