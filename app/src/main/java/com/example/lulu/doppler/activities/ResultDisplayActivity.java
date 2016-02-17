@@ -144,6 +144,7 @@ public class ResultDisplayActivity extends ActionBarActivity {
                 double[] fft = new double[buffer.length * 2];
 
                 for (int i = 0; i < bufferSize; i++) {
+
                     fft[i] = (double) buffer[i];
                 }
 
@@ -157,7 +158,7 @@ public class ResultDisplayActivity extends ActionBarActivity {
                         argmax = j;
                     }
                 }
-                double res = argmax * sampleRateInHz / bufferSize;
+                double res = argmax * (sampleRateInHz) / bufferSize;
                 //System.out.println("ikik : " + argmax);
 
                 if (res < 15000) {

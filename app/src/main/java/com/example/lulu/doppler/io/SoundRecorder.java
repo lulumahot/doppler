@@ -18,6 +18,7 @@ public class SoundRecorder extends AsyncTask<Void, short[], Void> {
     AudioRecord recorder;
 
     short[] buffer;
+    short[] dsbuffer;
     int nbRealValues;
 
     private final Collection<OnSoundReadListener> listeners = new ArrayList<>();
@@ -30,6 +31,7 @@ public class SoundRecorder extends AsyncTask<Void, short[], Void> {
         this.bufferSize = AudioRecord.getMinBufferSize(sampleRateInHz, channelConfig, audioFormat);
         this.recorder = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, sampleRateInHz, channelConfig, audioFormat, bufferSize);
         this.buffer = new short[bufferSize];
+        //this.dsbuffer = new short[bufferSize/22 + 1];
     }
 
     @Override
@@ -40,6 +42,9 @@ public class SoundRecorder extends AsyncTask<Void, short[], Void> {
 
             // Retourne le nombre de valeurs réelles, parce qu'il peut y en avoir moins que la taille du tableau
             nbRealValues = recorder.read(buffer, 0, bufferSize);
+            /*for (int i= 22 ; i < bufferSize ; i=i+22)
+                dsbuffer[i/2]=buffer[i];
+                */
             buffer= WaveletFilter.filter(buffer);
             for(OnSoundReadListener listener : listeners) {
                 listener.OnReceive(buffer, nbRealValues);

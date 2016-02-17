@@ -10,11 +10,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.example.lulu.doppler.R;
+import com.example.lulu.doppler.tools.WaveletFilter;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import java.lang.annotation.Target;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -54,8 +57,13 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(intent);
                 scv.hide();
             }
-        } );
-
+        });
+        List<Double> adec = new ArrayList<>();
+        for(int i=0 ; i<16 ; i++)
+            adec.add((double) i);
+        List<Double> d = WaveletFilter.decomposition(adec, WaveletFilter.HI_D,WaveletFilter.LO_D);
+        for (int i = 0 ; i<d.size() ; i++)
+            System.out.println("okok "+i + " " +d.get(i));
     }
 
     @Override
