@@ -9,6 +9,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Lucien on 12/02/2016.
@@ -19,13 +21,27 @@ public class SaveSound {
     private short[] rawData;
     private int sampleRateInHz;
 
+    public SaveSound(short[] rawData, int sampleRateInHz,String s){
+        this.rawData=rawData;
+        this.sampleRateInHz=sampleRateInHz;
+        File sdCard = Environment.getExternalStorageDirectory();
+        File dir = new File (sdCard.getAbsolutePath() + "/EchoDoppler");
+        dir.mkdirs();
+        Calendar c = Calendar.getInstance();
+        Date d = c.getTime();
+        //int seconds = c.get(Calendar.SECOND);
+        waveFile = new File(dir, s+d.toString()+".wav");
+    }
     public SaveSound(short[] rawData, int sampleRateInHz){
         this.rawData=rawData;
         this.sampleRateInHz=sampleRateInHz;
         File sdCard = Environment.getExternalStorageDirectory();
         File dir = new File (sdCard.getAbsolutePath() + "/EchoDoppler");
         dir.mkdirs();
-        waveFile = new File(dir, "filenamepourlemoment.wav");
+        Calendar c = Calendar.getInstance();
+        Date d = c.getTime();
+        //int seconds = c.get(Calendar.SECOND);
+        waveFile = new File(dir, d.toString()+".wav");
     }
 
     public File getWaveFile() {

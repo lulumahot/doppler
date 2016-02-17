@@ -1,6 +1,7 @@
 package com.example.lulu.doppler.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -10,8 +11,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.lulu.doppler.R;
+import com.example.lulu.doppler.io.FileChooser;
 import com.example.lulu.doppler.io.SaveSound;
 import com.example.lulu.doppler.io.SoundRecorder;
 import com.example.lulu.doppler.listeners.OnSoundReadListener;
@@ -26,6 +29,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 
 import org.jtransforms.fft.DoubleFFT_1D;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -38,13 +42,14 @@ public class ResultDisplayActivity extends ActionBarActivity {
 
     AudioTrack at;
     private com.github.amlcurran.showcaseview.targets.Target t2;
+    private com.github.amlcurran.showcaseview.targets.Target t3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result_display);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Context context = getApplicationContext();
+        final Context context = getApplicationContext();
         am=(AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
         //am.setMode(AudioManager.MODE_IN_CALL);
         //am.setSpeakerphoneOn(true);
@@ -52,7 +57,10 @@ public class ResultDisplayActivity extends ActionBarActivity {
         final int sampleRateInHz = 44100;
         Button b2;
         b2 = (Button) findViewById(R.id.button2);
+        Button b3;
+        b3 = (Button) findViewById(R.id.boutonfiltre);
         t2 = new ViewTarget(R.id.register, this);
+        t3 = new ViewTarget(R.id.boutonfiltre,this);
         final ShowcaseView scv1 = new ShowcaseView.Builder(this)
                 .setTarget(com.github.amlcurran.showcaseview.targets.Target.NONE)
                 .setContentTitle("Aide :")
@@ -70,6 +78,14 @@ public class ResultDisplayActivity extends ActionBarActivity {
             }
         });
 
+        b3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ResultDisplayActivity.this, FilterActivity.class);
+                startActivity(intent);
+                scv1.hide();
+            }
+        });
 
         ImageButton ib = (ImageButton) findViewById(R.id.register);
         ib.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +111,8 @@ public class ResultDisplayActivity extends ActionBarActivity {
                         e.printStackTrace();
                     }
                     completeSound.clear();
+                    Toast.makeText(getApplicationContext(), "Votre fichier a été enregistré avec succès",
+                            Toast.LENGTH_SHORT).show();
                 }
 
             }

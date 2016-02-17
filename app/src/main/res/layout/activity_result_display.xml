@@ -35,4 +35,12 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentRight="true" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Filtrer le fichier \n précédemment enregistré"
+        android:id="@+id/boutonfiltre"
+        android:layout_below="@+id/register"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

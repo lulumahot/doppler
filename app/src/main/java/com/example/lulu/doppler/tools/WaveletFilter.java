@@ -5,7 +5,7 @@ import java.util.List;
 
 public class WaveletFilter {
 
-    
+
     // Daubechies 10 filters :
     public static double LO_D[] = {-1.3264e-05, 9.3589e-05, -1.1647e-04, -6.8586e-04, 0.0020, 0.0014, -0.0107, 0.0036, 0.0332, -0.0295,
             -0.0714, 0.0931, 0.1274, -0.1959, -0.2498, 0.2812, 0.6885, 0.5272, 0.1882, 0.0267 };

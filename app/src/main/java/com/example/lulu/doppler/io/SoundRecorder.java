@@ -45,7 +45,7 @@ public class SoundRecorder extends AsyncTask<Void, short[], Void> {
             /*for (int i= 22 ; i < bufferSize ; i=i+22)
                 dsbuffer[i/2]=buffer[i];
                 */
-            buffer= WaveletFilter.filter(buffer);
+            //buffer= WaveletFilter.filter(buffer);
             for(OnSoundReadListener listener : listeners) {
                 listener.OnReceive(buffer, nbRealValues);
             }
