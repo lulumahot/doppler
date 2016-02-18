@@ -39,6 +39,9 @@ public class ResultDisplayActivity extends ActionBarActivity {
     ArrayList<Short> completeSound = new ArrayList<Short>();
     Boolean record=false;
     AudioManager am;
+    final int sampleRateInHz = 44100;
+    final SoundRecorder recorder = new SoundRecorder(sampleRateInHz, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
+    final int bufferSize = recorder.getBufferSize();
 
     AudioTrack at;
     private com.github.amlcurran.showcaseview.targets.Target t2;
@@ -54,7 +57,7 @@ public class ResultDisplayActivity extends ActionBarActivity {
         //am.setMode(AudioManager.MODE_IN_CALL);
         //am.setSpeakerphoneOn(true);
         //am.setMicrophoneMute(true);
-        final int sampleRateInHz = 44100;
+
         Button b2;
         b2 = (Button) findViewById(R.id.button2);
         Button b3;
@@ -82,6 +85,8 @@ public class ResultDisplayActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ResultDisplayActivity.this, FilterActivity.class);
+                recorder.stop();
+                at.stop();
                 startActivity(intent);
                 scv1.hide();
             }
@@ -136,8 +141,7 @@ public class ResultDisplayActivity extends ActionBarActivity {
         LineData data = new LineData();
         chart.setData(data);
 
-        SoundRecorder recorder = new SoundRecorder(sampleRateInHz, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
-        final int bufferSize = recorder.getBufferSize();
+
 
         at = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRateInHz, AudioFormat.CHANNEL_OUT_MONO,
                 recorder.getAudioFormat(), bufferSize, AudioTrack.MODE_STREAM);
@@ -251,4 +255,10 @@ public class ResultDisplayActivity extends ActionBarActivity {
         return set;
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //recorder.start();
+    }
 }

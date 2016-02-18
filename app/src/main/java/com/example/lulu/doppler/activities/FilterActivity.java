@@ -2,6 +2,7 @@ package com.example.lulu.doppler.activities;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.widget.Toast;
 
@@ -35,28 +36,47 @@ public class FilterActivity extends ActionBarActivity {
                                                           dialog.setMessage("Filtrage en cours veuillez patienter");
                                                           dialog.setIndeterminate(true);
                                                           dialog.setCanceledOnTouchOutside(false);
+                                                          //dialog.show();
+
+                                                          Thread t = new Thread (new Runnable() {
+                                                              public void run() {
+                                                                  short[] in = getShortsFromFile(file);
+                                                                  short[] bufferin = new short[4096];
+                                                                  short[] bufferout = new short[4096];
+                                                                  short[] out = new short[in.length];
+                                                                  //System.out.println("pq" +in.length);
+                                                                  for (int i =0 ; i < in.length-4096 ; i=i+4096){
+                                                                      System.arraycopy(in, i, bufferin, 0, 4096);
+                                                                      bufferout= WaveletFilter.filter(bufferin);
+                                                                      //bufferout=bufferin;
+                                                                      System.arraycopy(bufferout, 0, out, i, 4096);
+                                                                      //System.out.println("on en est au tour" + i);
+                                                                  }
+                                                                  System.out.println("le filtrag est terminé");
+                                                                  SaveSound ss =new SaveSound(out,44100,"filtre");
+                                                                  try {
+                                                                      ss.rawToWave();
+                                                                  } catch (IOException e) {
+                                                                      e.printStackTrace();
+                                                                  }
+                                                                  System.out.println("fin");
+                                                              }
+                                                          });
+                                                          //dialog.show();
+                                                          t.start();
                                                           dialog.show();
-                                                          //dialog.cancel();
-                                                          short[] in = getShortsFromFile(file);
-                                                          short[] bufferin = new short[4096];
-                                                          short[] bufferout = new short[4096];
-                                                          short[] out = new short[in.length];
-                                                          System.out.println("pq" +in.length);
-                                                          /*for (int i =0 ; i < in.length ; i=i+4096){
-                                                              for (int j = 0; j<4096 ; j++){
-                                                                  bufferin[j]=in[j+i];
-                                                              }
-                                                              //bufferout= WaveletFilter.filter(bufferin);
-                                                              bufferout=bufferin;
-                                                              for (int j = 0; j<4096 ; j++){
-                                                                  out[j+i]=bufferout[j];
-                                                              }
+                                                          try {
+                                                              t.join();
+                                                          } catch (InterruptedException e) {
+                                                              e.printStackTrace();
                                                           }
-                                                          SaveSound ss =new SaveSound(out,44100,"filtre");*/
-                                                          dialog.cancel();
+
+                                                          dialog.dismiss();
                                                           Toast.makeText(getApplicationContext(), "Votre fichier a été filtré et enregistré avec succès",
-                                                                  Toast.LENGTH_SHORT).show();
+                                                                  Toast.LENGTH_LONG).show();
+
                                                       }}).showDialog();
+        //NavUtils.navigateUpFromSameTask(this);
     }
 
 

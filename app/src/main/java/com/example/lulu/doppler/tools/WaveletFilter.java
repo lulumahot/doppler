@@ -64,8 +64,8 @@ public class WaveletFilter {
             //stockage pour reconstruction
 
             tab_conv_High_lvl.get(j).add(0, (double) buffer_high.size() + 1);
-            for (int k = 0; k < buffer_high.size(); k++) {
-                tab_conv_High_lvl.get(j).add(buffer_high.get(k));
+            for (double k : buffer_high) {
+                tab_conv_High_lvl.get(j).add(k);
             }
             //mï¿½j size pour calcul reconstruction plus tard
             current_size = buffer_low.size();
@@ -91,15 +91,15 @@ public class WaveletFilter {
             System.out.println("seuil = " + seuil);
             //y = mean(bufferH);
             double y = 0.0;
-            for (int i = 0; i < buffer_high.size(); i++){
-                y += buffer_high.get(i);
+            for (double i : buffer_high){
+                y += i;
             }
             y /= buffer_high.size();
             System.out.println("y = " + y);
             //ecart = (1/length(bufferH))*sum(((bufferH)-mean(bufferH)).^2);
             double ecart = 0.0;
-            for (int i = 0; i < buffer_high.size(); i++){
-                ecart += Math.pow((buffer_high.get(i) - y),2);
+            for (double  i : buffer_high){
+                ecart += Math.pow((i - y),2);
             }
             ecart /= buffer_high.size();
             System.out.println("ecart = " + ecart);

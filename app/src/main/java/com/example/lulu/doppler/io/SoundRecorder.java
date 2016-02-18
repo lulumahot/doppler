@@ -62,6 +62,15 @@ public class SoundRecorder extends AsyncTask<Void, short[], Void> {
         recorder = null;
     }
 
+    public void stop(){
+        recorder.stop();
+
+    }
+
+    public void start(){
+        recorder.startRecording();
+    }
+
     public void addListener(OnSoundReadListener listener) {
         listeners.add(listener);
     }
