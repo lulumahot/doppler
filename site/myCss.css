@@ -4,19 +4,7 @@
 *, *::before, *::after {
     box-sizing: border-box;
 }
-body {
-    padding-top: 70px;
-}
-body {
-    background-color: #fff;
-    color: #333;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-size: 14px;
-    line-height: 1.42857;
-}
-body {
-    margin: 0;
-}
+
 *, *::before, *::after {
     box-sizing: border-box;
 }
@@ -26,8 +14,20 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
+    background-color: #444;
 }
+
+body { 
+	padding-top: 70px;
+	background-color: #fff;
+    color: #333;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.42857;
+    margin: 0;
+
+
+} 
 
 li {
     float: left;
@@ -46,5 +46,123 @@ li a:hover:not(.active) {
 }
 
 .active {
-    background-color: #4CAF50;
+    background-color: #ED4C3A;
 }
+
+html { 
+
+} 
+
+/*******************************************************************
+LAYOUT
+*******************************************************************/
+
+div { 
+
+
+} 
+
+#sidebar { 
+
+
+} 
+
+.navbar { 
+
+
+} 
+
+.navbar-fixed-top { 
+
+
+} 
+
+.navbar-inverse { 
+
+
+} 
+
+.container { 
+
+
+} 
+
+.navbar-header { 
+
+
+} 
+
+.collapse { 
+
+
+} 
+
+.navbar-collapse { 
+
+
+} 
+
+.row { 
+
+
+} 
+
+.row-offcanvas { 
+
+
+} 
+
+.row-offcanvas-right { 
+
+
+} 
+
+.col-xs-6 { 
+
+
+} 
+
+.col-sm-3 { 
+
+
+} 
+
+.sidebar-offcanvas { 
+
+
+} 
+
+.well { 
+
+
+} 
+
+.sidebar-nav { 
+
+
+} 
+
+.media { 
+
+
+} 
+
+.col-xs-12 { 
+
+
+} 
+
+.col-sm-9 { 
+
+
+} 
+
+.jumbotron { 
+
+
+} 
+
+.list-group { 
+
+
+} 
