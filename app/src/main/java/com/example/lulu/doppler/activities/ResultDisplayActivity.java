@@ -40,7 +40,7 @@ public class ResultDisplayActivity extends ActionBarActivity {
     Boolean record=false;
     AudioManager am;
     final int sampleRateInHz = 44100;
-    final SoundRecorder recorder = new SoundRecorder(sampleRateInHz, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
+    SoundRecorder recorder = new SoundRecorder(sampleRateInHz, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
     final int bufferSize = recorder.getBufferSize();
 
     AudioTrack at;
@@ -57,7 +57,7 @@ public class ResultDisplayActivity extends ActionBarActivity {
         //am.setMode(AudioManager.MODE_IN_CALL);
         //am.setSpeakerphoneOn(true);
         //am.setMicrophoneMute(true);
-
+        final boolean[] aide = {true};
         Button b2;
         b2 = (Button) findViewById(R.id.button2);
         Button b3;
@@ -70,7 +70,24 @@ public class ResultDisplayActivity extends ActionBarActivity {
                 .setContentText("Cliquez sur le boutton pour enregistrer le bébé\n Le diagramme affiche le spectrogramme du signal")
                 .hideOnTouchOutside()
                 .build();
-        scv1.setButtonText("OK");
+        scv1.setButtonText("Suivant");
+        scv1.overrideButtonClick(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(aide[0]) {
+                    scv1.setShowcase(t3, true);
+                    scv1.setButtonText("OK");
+                    scv1.setContentText("Cliquez sur ce boutton pour filtrer un enregistrement précédement effectué");
+                    aide[0] =false;
+                }
+                else{
+                    scv1.hide();
+                    aide[0] =true;
+                }
+
+
+            }
+        });
         scv1.hide();
 
         b2.setOnClickListener(new View.OnClickListener() {
@@ -260,5 +277,15 @@ public class ResultDisplayActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         //recorder.start();
+        recorder = new SoundRecorder(sampleRateInHz, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
+        at.play();
     }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        at.pause();
+        //recorder.stop();
+    }
+
 }

@@ -58,12 +58,7 @@ public class MainActivity extends ActionBarActivity {
                 scv.hide();
             }
         });
-        List<Double> adec = new ArrayList<>();
-        for(int i=0 ; i<16 ; i++)
-            adec.add((double) i);
-        List<Double> d = WaveletFilter.decomposition(adec, WaveletFilter.HI_D,WaveletFilter.LO_D);
-        for (int i = 0 ; i<d.size() ; i++)
-            System.out.println("okok "+i + " " +d.get(i));
+
     }
 
     @Override
