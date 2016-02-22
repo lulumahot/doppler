@@ -85,6 +85,17 @@ div#gop2p li a{
     background-color: white;
 }
 
+div#guyteheube li {
+  list-style-image: url('./images/github.png');
+}
+
+div#guyteheube li a{
+    /*color: white;*/
+    text-align: center;
+    text-decoration: none;
+    background-color: white;
+}
+
 #sidebar { 
 
 
