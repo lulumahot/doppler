@@ -9,13 +9,13 @@
     box-sizing: border-box;
 }
 
-ul {
+/*ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
     background-color: #444;
-}
+}*/
 
 body { 
 	padding-top: 70px;
@@ -29,16 +29,12 @@ body {
 
 } 
 
-li {
+/*li {
     float: left;
-}
+}*/
 
 li a {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
+
 }
 
 li a:hover:not(.active) {
@@ -57,10 +53,37 @@ html {
 LAYOUT
 *******************************************************************/
 
-div { 
-
-
+div#seloupoivre { 
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #444;
 } 
+
+div#seloupoivre li {
+  float: left;
+  list-style-type: none;
+}
+
+div#seloupoivre li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+div#gop2p {
+  list-style-image: url('./images/small_dino.png');
+  overflow: hidden;
+}
+
+div#gop2p li a{
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    background-color: white;
+}
 
 #sidebar { 
 
