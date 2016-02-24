@@ -125,6 +125,26 @@ div#contacts a {
   background-color: white;
 }
 
+div#zdino{
+	font-size: 14px;
+}
+
+div#undino{
+	font-size: 12px;
+}
+
+div#deuxdinos{
+	font-size: 10px;
+}
+
+div#troisdinos{
+	font-size: 8px;
+}
+
+div#quatredinos{
+	font-size: 6px;
+}
+
 #sidebar { 
 
 
