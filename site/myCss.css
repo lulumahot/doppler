@@ -114,6 +114,13 @@ div#guyteheube li a{
     background-color: white;
 }
 
+div#contacts a {
+  color: black;
+  text-align: center;
+  text-decoration: none;
+  background-color: white;
+}
+
 #sidebar { 
 
 
