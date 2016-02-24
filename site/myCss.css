@@ -17,6 +17,26 @@
     background-color: #444;
 }*/
 
+.contacts {
+    /*background-color: grey;*/
+	display: flex;
+	flex-direction: column;
+}
+.haut {
+	/*background-color: pink;*/
+	display: flex;
+	justify-content: space-around;
+}
+
+.bas {
+	/*background-color: red;*/
+	display: flex;
+	justify-content: space-around;
+}
+.element {
+    /*background-color: white;*/
+	width: 40%;
+}
 body { 
     padding-top: 0px;
     background-color: #fff;
