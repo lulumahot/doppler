@@ -37,6 +37,8 @@ public class MainActivity extends ActionBarActivity {
                 .build();
         scv.setButtonText("OK");
         scv.hide();
+        int proc = Runtime.getRuntime().availableProcessors();
+        System.out.println("okok : "+proc);
         b.setOnClickListener(new View.OnClickListener() {
 
             @Override

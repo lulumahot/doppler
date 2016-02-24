@@ -25,12 +25,12 @@ public class SaveSound {
         this.rawData=rawData;
         this.sampleRateInHz=sampleRateInHz;
         File sdCard = Environment.getExternalStorageDirectory();
-        File dir = new File (sdCard.getAbsolutePath() + "/EchoDoppler");
+        File dir = new File (sdCard.getAbsolutePath() + "/EchoDoppler/Sons filtrés");
         dir.mkdirs();
         Calendar c = Calendar.getInstance();
         Date d = c.getTime();
         //int seconds = c.get(Calendar.SECOND);
-        waveFile = new File(dir, s+d.toString()+".wav");
+        waveFile = new File(dir, d.toString()+".wav");
     }
     public SaveSound(short[] rawData, int sampleRateInHz){
         this.rawData=rawData;

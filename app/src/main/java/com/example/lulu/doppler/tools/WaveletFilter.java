@@ -64,8 +64,8 @@ public class WaveletFilter {
             //stockage pour reconstruction
 
             tab_conv_High_lvl.get(j).add(0, (double) buffer_high.size() + 1);
-            for (double k : buffer_high) {
-                tab_conv_High_lvl.get(j).add(k);
+            for (int  k = 0 ; k < buffer_high.size() ; k++) {
+                tab_conv_High_lvl.get(j).add(buffer_high.get(k));
             }
             //mï¿½j size pour calcul reconstruction plus tard
             current_size = buffer_low.size();
@@ -88,21 +88,21 @@ public class WaveletFilter {
             }
     //seuillage
             double seuil = Math.sqrt(2*Math.log((double)buffer_high.size()));
-            System.out.println("seuil = " + seuil);
+            //System.out.println("seuil = " + seuil);
             //y = mean(bufferH);
             double y = 0.0;
-            for (double i : buffer_high){
-                y += i;
+            for (int i = 0 ; i< buffer_high.size() ; i++){
+                y += buffer_high.get(i);
             }
             y /= buffer_high.size();
-            System.out.println("y = " + y);
+            //System.out.println("y = " + y);
             //ecart = (1/length(bufferH))*sum(((bufferH)-mean(bufferH)).^2);
             double ecart = 0.0;
-            for (double  i : buffer_high){
-                ecart += Math.pow((i - y),2);
+            for (int  i = 0 ; i < buffer_high.size(); i++){
+                ecart += Math.pow((buffer_high.get(i) - y),2);
             }
             ecart /= buffer_high.size();
-            System.out.println("ecart = " + ecart);
+            //System.out.println("ecart = " + ecart);
             //bufferH = (bufferH - y)/sqrt(ecart);
             for (int i = 0; i < buffer_high.size(); i++){
                 double current_val_normalize = (buffer_high.get(i) - y)/Math.sqrt(ecart);
@@ -117,36 +117,68 @@ public class WaveletFilter {
                     buffer_high.set(i, y);
                 }
             }
-            System.out.println("\nordre : "+(j+1));
+            //System.out.println("\nordre : "+(j+1));
             buffer_reconstruit = reconstruction(buffer_low,buffer_high,HI_R, LO_R, tab_size[j]);
         }
 
         short buffer_res[] = new short[buff.length];
-        for(int i = 0 ; i < buff.length ; i++)
-            buffer_res[i]=0;
+        ///for(int i = 0 ; i < buff.length ; i++)
+        //    buffer_res[i]=0;
         for (int k = 0; k < buff.length; k=k+lvlech) {
             buffer_res[k] = (short) Math.round(buffer_reconstruit.get(k / lvlech));
         }
         return buffer_res;
     }
 
-    public static List<Double> decomposition(List<Double> buffer, double HI_D [], double LO_D[]) {
+
+    private static class decomp implements Runnable {
+        List<Double> buffer;
+        double D [];
+        List<Double> tmp;
+
+        public decomp(List<Double> buffer, double D []){
+            this.buffer = buffer;
+            this.D = D;
+        }
+
+
+        @Override
+        public void run() {
+            tmp = convolve(buffer, D);
+        }
+    }
+
+
+
+
+    public static List<Double> decomposition(final List<Double> buffer, final double HI_D [], final double LO_D[]) {
         //maybe revoir les classes mais pour l'instant ...
+        final List<Double> result = new ArrayList<Double>();
+        decomp p1 = new decomp(buffer, LO_D);
+        decomp p2 = new decomp(buffer, HI_D);
+        Thread t1 = new Thread (p1);
+        Thread t2 = new Thread (p2);
 
-        List<Double> tmp_lo = convolve(buffer,LO_D);
-        List<Double> tmp_hi = convolve(buffer,HI_D);
-        int size = tmp_lo.size();
-        List<Double> result = new ArrayList<Double>(size);
 
-        for (int i = 0 ; i<size ; i++){
-            result.add((double) 0);
-        }
-
+        /*List<Double> tmp_hi = convolve(buffer, HI_D);
         for (int i = 1; i < size/2; i++) {
-            result.set(i-1, tmp_lo.get((i*2)-1));
-            result.set(i+(size/2)-1, tmp_hi.get((i*2)-1));
-        }
+            result.add(tmp_hi.get((i * 2) - 1));
+        }*/
 
+        t1.start();
+        t2.start();
+        try {
+            t1.join();
+            t2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        for (int i = 1; i < p1.tmp.size()/2; i++) {
+            result.add(p1.tmp.get((i * 2) - 1));
+        }
+        for (int i = 1; i < p2.tmp.size()/2; i++) {
+            result.add(p2.tmp.get((i * 2) - 1));
+        }
         return result;
     }
 
@@ -155,14 +187,11 @@ public class WaveletFilter {
         List<Double> buffer_high_up =  new ArrayList<Double>();
 
         //sur echantillonnage
-        //List<Integer> list = new ArrayList<Integer>(Collections.nCopies(buffer_low_up.size(), 0.0));
-        for (int i = 0 ; i < 2*buffer_low.size() ; i++) {
-            buffer_high_up.add(0.0);
-            buffer_low_up.add(0.0);
-        }
         for (int i = 0; i < buffer_low.size(); i++){
-            buffer_high_up.set(i*2, buffer_high.get(i));
-            buffer_low_up.set(i*2, buffer_low.get(i));
+            buffer_high_up.add(buffer_high.get(i));
+            buffer_high_up.add(0.0);
+            buffer_low_up.add(buffer_low.get(i));
+            buffer_low_up.add(0.0);
         }
 
         List<Double> tmp_lo = convolve(buffer_low_up,LO_R);
@@ -173,7 +202,7 @@ public class WaveletFilter {
         int nb_val = ((tmp_lo.size()-1)-current_size)/2;
         List<Double> result = new ArrayList<Double>(tmp_lo.size() - ((nb_val)*2) - 1);
 
-        System.out.println("size conv = " + tmp_lo.size() + "; nb_val = " + nb_val);
+        //System.out.println("size conv = " + tmp_lo.size() + "; nb_val = " + nb_val);
 
         for (int i = 0; i < tmp_lo.size() - ((nb_val)*2) - 1; i++) {
             result.add( tmp_lo.get(i+nb_val) + tmp_hi.get(i+nb_val));
@@ -197,9 +226,9 @@ public class WaveletFilter {
 
         for (int n=0; n< buffer.size(); n++) {
             int i=n;
-            for (double m : filter) {
+            for (int m = 0 ; m < filter.length ; m++) {
                 //result[i] += buffer[n] * filter[m];
-                result.set(i, result.get(i)+(buffer.get(n) * m));
+                result.set(i, result.get(i)+(buffer.get(n) * filter[m]));
                 i ++;
             }
         }
