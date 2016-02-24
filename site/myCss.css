@@ -60,11 +60,20 @@ body {
 }*/
 
 li a:hover:not(.active) {
-    background-color: #111;
+    background-color: #606060 ;
 }
 
 .active {
     background-color: #ED4C3A;
+}
+
+div#seloupoivre li a.cocoon {
+	margin: 0;
+    padding: 11px 16px;
+}
+.menu {
+	margin: 0;
+    padding: 0;
 }
 
 html { 
