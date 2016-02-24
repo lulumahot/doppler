@@ -18,24 +18,22 @@
 }*/
 
 body { 
-	padding-top: 70px;
-	background-color: #fff;
+    padding-top: 0px;
+    background-color: #fff;
     color: #333;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 14px;
     line-height: 1.42857;
     margin: 0;
-
-
 } 
 
 /*li {
     float: left;
 }*/
 
-li a {
+/*li a {
 
-}
+}*/
 
 li a:hover:not(.active) {
     background-color: #111;
@@ -80,6 +78,17 @@ div#gop2p {
 
 div#gop2p li a{
     color: white;
+    text-align: center;
+    text-decoration: none;
+    background-color: white;
+}
+
+div#guyteheube li {
+  list-style-image: url('./images/github.png');
+}
+
+div#guyteheube li a{
+    /*color: white;*/
     text-align: center;
     text-decoration: none;
     background-color: white;

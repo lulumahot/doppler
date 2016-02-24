@@ -197,11 +197,9 @@ public class WaveletFilter {
 
         for (int n=0; n< buffer.size(); n++) {
             int i=n;
-            for (int m=0; m< filter.length; m++) {
+            for (double m : filter) {
                 //result[i] += buffer[n] * filter[m];
-                double d = result.get(i);
-                double d2 = buffer.get(n);
-                result.set(i, d+(d2 * filter[m]));
+                result.set(i, result.get(i)+(buffer.get(n) * m));
                 i ++;
             }
         }
